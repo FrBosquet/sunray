@@ -5,7 +5,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import creds from '../../sunray-creds.json'
 
 export type Row = {
-  fecha: Date
+  fecha: string
   nombre: string
   dni: string
   importe: number
@@ -18,7 +18,7 @@ type Data = {
 }
 
 const parseRow = (row: GoogleSpreadsheetRow): Row => ({
-  fecha: new Date(row.Fecha.split('/').reverse().join('/')),
+  fecha: new Date(row.Fecha.split('/').reverse().join('/')).toISOString(),
   nombre: row.Nombre,
   dni: row.DNI,
   importe: +row.Importe.replace(/€|\./g, '').replace(',', '.'),

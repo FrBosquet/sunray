@@ -19,9 +19,21 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  doc.render(req.query)
+  const { query } = req
+  doc.render(query)
+
+  console.log(query)
 
   const buf = doc.getZip().generate({ type: 'nodebuffer' }) as Buffer
+  const clientName = query.cliente as string
+  const date = new Date(query.fecha as string)
+
+  const filename = [
+    clientName.replace(/\s/gi, '_').toLowerCase(),
+    date.getDate(),
+    date.getMonth(),
+    date.getFullYear(),
+  ].join('_')
 
   res.status(200)
   res.setHeader('Content-Length', buf.byteLength)
@@ -29,7 +41,7 @@ export default async function handler(
     'Content-Type',
     'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
   )
-  res.setHeader('Content-Disposition', 'attachment; filename=temp.docx')
+  res.setHeader('Content-Disposition', `attachment; filename=${filename}.docx`)
   res.write(buf, 'binary')
   res.end()
 }

@@ -10,15 +10,31 @@ const fetchData = async (): Promise<Row[]> => {
   return data.rows
 }
 
+const buildquery = (row: Row): string => {
+  console.log(row)
+
+  const params = new URLSearchParams({
+    cliente: row.nombre,
+    nif: row.dni,
+    fecha: row.fecha,
+    importe: row.importe.toString(),
+  })
+
+  return `http://localhost:3000/api/contract?${params.toString()}`
+}
+
 export default async function HomePage() {
   const rows = await fetchData()
 
   return (
     <div>
-      <h2>Ultimos clientes</h2>
+      <h2 className="font-bold">Ultimos clientes</h2>
       <ul>
         {rows.map((row) => (
-          <li key={row.id}>{row.nombre}</li>
+          <li className="flex" key={row.id}>
+            <h3 className="flex-1">{row.nombre}</h3>
+            <a href={buildquery(row)}>Descargar contrato</a>
+          </li>
         ))}
       </ul>
     </div>
