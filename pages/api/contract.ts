@@ -19,6 +19,8 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  if (req.method !== 'GET') throw new Error('Call this endpoint with get')
+
   const { query } = req
   doc.render(query)
 
