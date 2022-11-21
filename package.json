@@ -14,6 +14,7 @@
     "@types/node": "18.11.9",
     "@types/react": "18.0.25",
     "@types/react-dom": "18.0.9",
+    "@types/react-icons": "^3.0.0",
     "docxtemplater": "^3.32.4",
     "eslint": "8.28.0",
     "eslint-config-next": "13.0.4",
@@ -22,6 +23,7 @@
     "pizzip": "^3.1.3",
     "react": "18.2.0",
     "react-dom": "18.2.0",
+    "react-icons": "^4.6.0",
     "typescript": "4.9.3"
   },
   "devDependencies": {

@@ -1,5 +1,7 @@
 import { Row } from '../pages/api/rows'
 
+import { BsCloudDownload } from 'react-icons/bs'
+
 const fetchData = async (): Promise<Row[]> => {
   const res = await fetch('http://localhost:3000/api/rows', {
     cache: 'no-store',
@@ -28,12 +30,18 @@ export default async function HomePage() {
 
   return (
     <div>
-      <h2 className="font-bold">Ultimos clientes</h2>
+      <h2 className="font-bold">Clientes</h2>
       <ul>
         {rows.map((row) => (
-          <li className="flex" key={row.id}>
+          <li className="flex hover:bg-gray-800 p-1" key={row.id}>
             <h3 className="flex-1">{row.nombre}</h3>
-            <a href={buildquery(row)}>Descargar contrato</a>
+            <a
+              className="flex items-center gap-1 text-yellow-400"
+              href={buildquery(row)}
+            >
+              <span>Descargar contrato</span>
+              <BsCloudDownload />
+            </a>
           </li>
         ))}
       </ul>
