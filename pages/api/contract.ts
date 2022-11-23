@@ -24,8 +24,6 @@ export default async function handler(
   const { query } = req
   doc.render(query)
 
-  console.log(query)
-
   const buf = doc.getZip().generate({ type: 'nodebuffer' }) as Buffer
   const clientName = query.cliente as string
   const date = new Date(query.fecha as string)

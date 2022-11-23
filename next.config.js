@@ -5,6 +5,16 @@ const nextConfig = {
   experimental: {
     appDir: true,
   },
+  images: {
+    remotePatterns: [
+      {
+        hostname: 'lh3.googleusercontent.com',
+        protocol: 'https',
+        port: '',
+        pathname: '/a/**',
+      },
+    ],
+  },
 }
 
 module.exports = nextConfig

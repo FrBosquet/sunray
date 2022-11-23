@@ -8,8 +8,8 @@ export type Row = {
   fecha: string
   nombre: string
   dni: string
-  importe: number
-  generado: boolean
+  importe: string
+  generado: string
   id: string
 }
 
@@ -21,8 +21,8 @@ const parseRow = (row: GoogleSpreadsheetRow): Row => ({
   fecha: new Date(row.Fecha.split('/').reverse().join('/')).toISOString(),
   nombre: row.Nombre,
   dni: row.DNI,
-  importe: +row.Importe.replace(/€|\./g, '').replace(',', '.'),
-  generado: row.Generado === 'TRUE',
+  importe: row.Importe.replace(/€|\./g, '').replace(',', '.'),
+  generado: row.Generado,
   id: row.rowIndex.toString(),
 })
 

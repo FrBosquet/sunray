@@ -1,50 +1,31 @@
-import { Row } from '../pages/api/rows'
+'use client'
 
-import { BsCloudDownload } from 'react-icons/bs'
+import { AiFillGoogleCircle } from 'react-icons/ai'
 
-const fetchData = async (): Promise<Row[]> => {
-  const res = await fetch('http://localhost:3000/api/rows', {
-    cache: 'no-store',
-  })
-
-  const data = await res.json()
-
-  return data.rows
-}
-
-const buildquery = (row: Row): string => {
-  console.log(row)
-
-  const params = new URLSearchParams({
-    cliente: row.nombre,
-    nif: row.dni,
-    fecha: row.fecha,
-    importe: row.importe.toString(),
-  })
-
-  return `http://localhost:3000/api/contract?${params.toString()}`
-}
-
-export default async function HomePage() {
-  const rows = await fetchData()
+export default function Login() {
+  const createGoogleAuthLink = async () => {
+    try {
+      const request = await fetch('http://localhost:3000/api/googleAuthLink')
+      const response = await request.json()
+      window.location.href = response.url
+    } catch (error) {
+      console.error(error)
+    }
+  }
 
   return (
-    <div>
-      <h2 className="font-bold">Clientes</h2>
-      <ul>
-        {rows.map((row) => (
-          <li className="flex hover:bg-gray-800 p-1" key={row.id}>
-            <h3 className="flex-1">{row.nombre}</h3>
-            <a
-              className="flex items-center gap-1 text-yellow-400"
-              href={buildquery(row)}
-            >
-              <span>Descargar contrato</span>
-              <BsCloudDownload />
-            </a>
-          </li>
-        ))}
-      </ul>
-    </div>
+    <section className="container flex justify-center">
+      <article className="w-44 flex flex-col gap-2">
+        <h1>Acceder</h1>
+        <button
+          type="button"
+          onClick={createGoogleAuthLink}
+          className="w-full p-2 flex justify-center items-center gap-1 bg-blue-500 rounded-md hover:bg-blue-300 transition-all"
+        >
+          <AiFillGoogleCircle />
+          con Google
+        </button>
+      </article>
+    </section>
   )
 }
