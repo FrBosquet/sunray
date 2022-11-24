@@ -1,18 +1,26 @@
-import { Row } from '../../pages/api/rows'
-
 import Image from 'next/image'
 import { BsCloudDownload } from 'react-icons/bs'
 import { fetchRows, getAuthToken, getUserInfo } from '../../lib/google'
 
-const buildquery = (row: Row): string => {
+const buildquery = (row: Row, token: string): string => {
   const params = new URLSearchParams({
     cliente: row.nombre,
     nif: row.dni,
     fecha: row.fecha,
     importe: row.importe,
+    token,
   })
 
   return `http://localhost:3000/api/contract?${params.toString()}`
+}
+
+export type Row = {
+  fecha: string
+  nombre: string
+  dni: string
+  importe: string
+  generado: string
+  id: string
 }
 
 type ServerProps = {
@@ -52,7 +60,7 @@ export default async function HomePage({ searchParams }: ServerProps) {
             <h3 className="flex-1">{row.nombre}</h3>
             <a
               className="flex items-center gap-1 text-yellow-400"
-              href={buildquery(row)}
+              href={buildquery(row, token)}
             >
               <span>Descargar contrato</span>
               <BsCloudDownload />
