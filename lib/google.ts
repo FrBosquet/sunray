@@ -1,5 +1,5 @@
 import { google } from 'googleapis'
-import { Row } from '../pages/api/rows'
+import { Row } from '../app/private/page'
 import { getToken, saveTokens } from './cache'
 
 const client_id = process.env.G_CLIENT_ID
@@ -8,10 +8,15 @@ const client_secret = process.env.G_CLIENT_SECRET
 export const oauth2Client = new google.auth.OAuth2(
   client_id,
   client_secret,
-  'http://localhost:3000/private'
+  'http://localhost:3000/api/redirect'
 )
 
 type Token = {
+  access_token: string
+  refresh_token: string
+  expiration: number
+}
+type Tokens = {
   access_token: string
   refresh_token: string
   expiration: number
@@ -54,6 +59,16 @@ export const getAuthToken = async (code: string): Promise<string> => {
   return tokens.access_token as string
 }
 
+export const getAuthTokens = async (code: string): Promise<Tokens> => {
+  const { tokens } = await oauth2Client.getToken(code)
+
+  saveTokens(code, tokens as Token)
+
+  const { access_token, refresh_token, expiration } = tokens as Token
+
+  return { access_token, refresh_token, expiration }
+}
+
 type Profile = {
   name: string
   picture: string
@@ -76,6 +91,7 @@ export const getUserInfo = async (token: string): Promise<Profile> => {
 }
 
 export const fetchRows = async (token: string): Promise<Row[]> => {
+  // TODO: Use googleapis
   const res = await fetch(
     `https://sheets.googleapis.com/v4/spreadsheets/${process.env.NEXT_APP_SPREADSHEET_ID}/values/Clientes!A:E`,
     {

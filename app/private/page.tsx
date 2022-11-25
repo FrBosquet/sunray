@@ -1,6 +1,8 @@
+import { cookies } from 'next/headers'
 import Image from 'next/image'
+import { redirect } from 'next/navigation'
 import { BsCloudDownload } from 'react-icons/bs'
-import { fetchRows, getAuthToken, getUserInfo } from '../../lib/google'
+import { fetchRows, getUserInfo } from '../../lib/google'
 
 const buildquery = (row: Row, token: string): string => {
   const params = new URLSearchParams({
@@ -32,11 +34,16 @@ type ServerProps = {
   }
 }
 
-export default async function HomePage({ searchParams }: ServerProps) {
-  const token = await getAuthToken(searchParams.code)
+export default async function HomePage({ searchParams, ...rest }: ServerProps) {
+  const nextCookies = cookies()
+  const token = nextCookies.get('access_token')
 
-  const rowsPromise = fetchRows(token)
-  const userInfoPromise = getUserInfo(token)
+  if (!token) {
+    redirect('/')
+  }
+
+  const rowsPromise = fetchRows(token.value)
+  const userInfoPromise = getUserInfo(token.value)
 
   const [rows, userInfo] = await Promise.all([rowsPromise, userInfoPromise])
 
@@ -60,7 +67,7 @@ export default async function HomePage({ searchParams }: ServerProps) {
             <h3 className="flex-1">{row.nombre}</h3>
             <a
               className="flex items-center gap-1 text-yellow-400"
-              href={buildquery(row, token)}
+              href={buildquery(row, token.value)}
             >
               <span>Descargar contrato</span>
               <BsCloudDownload />

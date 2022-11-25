@@ -1,4 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import Cookies from 'cookies'
 import Docxtemplater from 'docxtemplater'
 import fs, { createWriteStream, unlinkSync } from 'fs'
 import { google } from 'googleapis'
@@ -14,7 +15,13 @@ export default async function handler(
 ) {
   if (req.method !== 'GET') throw new Error('Call this endpoint with get')
 
-  // TODO: Get file from google drive
+  const cookies = new Cookies(req, res)
+
+  const access_token = cookies.get('access_token')
+
+  if (!access_token) {
+    return res.redirect('/')
+  }
 
   const { query } = req
   const { token, ...rest } = query
