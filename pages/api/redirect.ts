@@ -11,12 +11,12 @@ export default async function handler(
 
   const code = req.query.code as string
 
-  const { access_token, refresh_token, expiration } = await getAuthTokens(code)
+  const { access_token, refresh_token, expiry_date } = await getAuthTokens(code)
 
   const cookies = new Cookies(req, res)
 
   cookies.set('access_token', access_token)
   cookies.set('refresh_token', refresh_token)
-  cookies.set('expiration', `${expiration}`)
+  cookies.set('expiry_date', `${expiry_date}`)
   res.redirect('http://localhost:3000/private')
 }
