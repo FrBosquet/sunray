@@ -1,19 +1,11 @@
 import { NextApiRequest, NextApiResponse } from 'next'
-import { oauth2Client } from '../../lib/google'
+import { generateAuthUrl } from '../../lib/google'
 
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
-  const url = oauth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: [
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/drive.readonly',
-      'https://www.googleapis.com/auth/spreadsheets.readonly',
-    ],
-    prompt: 'consent',
-  })
+  const url = await generateAuthUrl()
+
   res.status(200).send({ url })
 }

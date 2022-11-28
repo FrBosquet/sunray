@@ -1,13 +1,10 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import Cookies from 'cookies'
 import Docxtemplater from 'docxtemplater'
-import fs, { createWriteStream, unlinkSync } from 'fs'
-import { google } from 'googleapis'
+import { unlinkSync } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import path from 'path'
 import PizZip from 'pizzip'
-
-const tempPath = path.resolve(path.join('output.docx'))
+import { getDriveFile, tempFilePath } from '../../lib/google'
 
 export default async function handler(
   req: NextApiRequest,
@@ -26,31 +23,10 @@ export default async function handler(
   const { query } = req
   const { token, ...rest } = query
 
-  const oauth2Client = new google.auth.OAuth2()
-  oauth2Client.setCredentials({ access_token: token as string })
-
-  const drive = google.drive({ version: 'v3', auth: oauth2Client })
-  const fileResponse = await drive.files.get(
-    {
-      fileId: '17NDMTcNr2_YJYt869MajPJUsQsM2Q8yx',
-      alt: 'media',
-    },
-    { responseType: 'stream' }
+  const content = await getDriveFile<PizZip.LoadData>(
+    token as string,
+    '17NDMTcNr2_YJYt869MajPJUsQsM2Q8yx'
   )
-
-  const content: PizZip.LoadData = await new Promise((contentResolve, rej) => {
-    const writer = createWriteStream(tempPath)
-    fileResponse.data.pipe(writer)
-
-    writer.on('error', (err) => {
-      rej(err)
-    })
-
-    writer.on('close', () => {
-      const file = fs.readFileSync(tempPath, 'binary')
-      contentResolve(file)
-    })
-  })
 
   const zip = new PizZip(content)
 
@@ -72,7 +48,7 @@ export default async function handler(
     date.getFullYear(),
   ].join('_')
 
-  unlinkSync(tempPath)
+  unlinkSync(tempFilePath)
 
   res.status(200)
   res.setHeader('Content-Length', buf.byteLength)
