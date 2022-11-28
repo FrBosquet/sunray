@@ -7,7 +7,7 @@ import type { NextApiRequest, NextApiResponse } from 'next'
 import path from 'path'
 import PizZip from 'pizzip'
 
-const tempPath = path.resolve(path.join('temp', 'output.docx'))
+const tempPath = path.resolve(path.join('output.docx'))
 
 export default async function handler(
   req: NextApiRequest,
