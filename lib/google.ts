@@ -7,7 +7,7 @@ const client_secret = process.env.G_CLIENT_SECRET
 export const oauth2Client = new google.auth.OAuth2(
   client_id,
   client_secret,
-  'http://localhost:3000/api/redirect'
+  `${process.env.HOST}/api/redirect`
 )
 
 type Tokens = {

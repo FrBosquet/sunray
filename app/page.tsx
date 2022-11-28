@@ -5,7 +5,7 @@ import { AiFillGoogleCircle } from 'react-icons/ai'
 export default function Login() {
   const createGoogleAuthLink = async () => {
     try {
-      const request = await fetch('http://localhost:3000/api/googleAuthLink')
+      const request = await fetch(`/api/googleAuthLink`)
       const response = await request.json()
       window.location.href = response.url
     } catch (error) {

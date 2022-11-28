@@ -13,7 +13,7 @@ const buildquery = (row: Row, token: string): string => {
     token,
   })
 
-  return `http://localhost:3000/api/contract?${params.toString()}`
+  return `${process.env.HOST}/api/contract?${params.toString()}`
 }
 
 export type Row = {
