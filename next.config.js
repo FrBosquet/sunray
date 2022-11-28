@@ -10,11 +10,10 @@ const nextConfig = {
       {
         hostname: 'lh3.googleusercontent.com',
         protocol: 'https',
-        port: '',
         pathname: '/a/**',
       },
     ],
   },
-}
+};
 
-module.exports = nextConfig
+module.exports = nextConfig;
