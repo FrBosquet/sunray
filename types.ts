@@ -8,3 +8,9 @@ export type Profile = {
   name: string
   picture: string
 }
+
+export type AppSettings = {
+  inputSheet: string
+  baseFolder: string
+  columnRange: string
+}
