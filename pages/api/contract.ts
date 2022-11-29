@@ -4,7 +4,7 @@ import Docxtemplater from 'docxtemplater'
 import { unlinkSync } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import PizZip from 'pizzip'
-import { getDriveFile, tempFilePath } from '../../lib/google'
+import { getDriveFile } from '../../lib/google'
 
 export default async function handler(
   req: NextApiRequest,
@@ -23,7 +23,7 @@ export default async function handler(
   const { query } = req
   const { token, ...rest } = query
 
-  const content = await getDriveFile<PizZip.LoadData>(
+  const content = await getDriveFile(
     token as string,
     '17NDMTcNr2_YJYt869MajPJUsQsM2Q8yx'
   )
@@ -47,8 +47,6 @@ export default async function handler(
     date.getMonth(),
     date.getFullYear(),
   ].join('_')
-
-  unlinkSync(tempFilePath)
 
   res.status(200)
   res.setHeader('Content-Length', buf.byteLength)

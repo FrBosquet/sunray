@@ -1,13 +1,12 @@
-import { createWriteStream, readFileSync } from 'fs'
+import { createWriteStream, readFileSync, write } from 'fs'
 import { google } from 'googleapis'
 import { join, resolve } from 'path'
 import { Row } from '../app/private/page'
 import { Profile, Tokens } from '../types'
+import stream from 'stream'
 
 const client_id = process.env.G_CLIENT_ID
 const client_secret = process.env.G_CLIENT_SECRET
-
-export const tempFilePath = resolve(join('output.docx'))
 
 export const oauth2Client = new google.auth.OAuth2(
   client_id,
@@ -58,10 +57,10 @@ export async function fetchRows(token: string): Promise<Row[]> {
   return rows
 }
 
-export async function getDriveFile<T>(
+export async function getDriveFile(
   token: string,
   fileId: string
-): Promise<T> {
+): Promise<Buffer> {
   oauth2Client.setCredentials({ access_token: token as string })
 
   const drive = google.drive({ version: 'v3', auth: oauth2Client })
@@ -75,7 +74,14 @@ export async function getDriveFile<T>(
   )
 
   return new Promise((contentResolve, rej) => {
-    const writer = createWriteStream(tempFilePath)
+    const data: Uint8Array[] = []
+    const writer = new stream.Writable({
+      write: function (chunk, encoding, next) {
+        data.push(chunk)
+
+        next()
+      },
+    })
     fileResponse.data.pipe(writer)
 
     writer.on('error', (err) => {
@@ -83,8 +89,7 @@ export async function getDriveFile<T>(
     })
 
     writer.on('close', () => {
-      const file = readFileSync(tempFilePath, 'binary')
-      contentResolve(file as T)
+      contentResolve(Buffer.concat(data))
     })
   })
 }
