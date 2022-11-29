@@ -18,5 +18,5 @@ export default async function handler(
   cookies.set('access_token', access_token)
   cookies.set('refresh_token', refresh_token)
   cookies.set('expiry_date', `${expiry_date}`)
-  res.redirect('http://localhost:3000/private')
+  res.redirect(`${process.env.NEXT_APP_HOST}/private`)
 }

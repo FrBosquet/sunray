@@ -1,6 +1,5 @@
 import { createWriteStream, readFileSync } from 'fs'
 import { google } from 'googleapis'
-import { oauth2 } from 'googleapis/build/src/apis/oauth2'
 import { join, resolve } from 'path'
 import { Row } from '../app/private/page'
 import { Profile, Tokens } from '../types'
