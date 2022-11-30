@@ -7,6 +7,7 @@ export type Tokens = {
 export type Profile = {
   name: string
   picture: string
+  email: string
 }
 
 export type AppSettings = {

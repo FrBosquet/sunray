@@ -1,7 +1,6 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import Cookies from 'cookies'
 import Docxtemplater from 'docxtemplater'
-import { unlinkSync } from 'fs'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import PizZip from 'pizzip'
 import { getDriveFile } from '../../lib/google'

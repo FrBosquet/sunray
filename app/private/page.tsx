@@ -2,19 +2,9 @@ import { cookies } from 'next/headers'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import { BsCloudDownload } from 'react-icons/bs'
+import { buildContractQuery } from '../../lib/api'
 import { fetchRows, getUserInfo } from '../../lib/google'
-
-const buildquery = (row: Row, token: string): string => {
-  const params = new URLSearchParams({
-    cliente: row.nombre,
-    nif: row.dni,
-    fecha: row.fecha,
-    importe: row.importe,
-    token,
-  })
-
-  return `/api/contract?${params.toString()}`
-}
+import { AppSettings, Profile } from '../../types'
 
 export type Row = {
   fecha: string
@@ -34,7 +24,20 @@ type ServerProps = {
   }
 }
 
-export default async function HomePage({ searchParams, ...rest }: ServerProps) {
+const getSettings = async (
+  token: string
+): Promise<{ settings: AppSettings; profile: Profile }> => {
+  const response = await fetch(`${process.env.NEXT_APP_HOST}/api/settings`, {
+    headers: {
+      Cookie: `access_token=${token}`,
+    },
+  })
+  const settings = await response.json()
+
+  return settings
+}
+
+export default async function HomePage() {
   const nextCookies = cookies()
   const token = nextCookies.get('access_token')
 
@@ -43,9 +46,12 @@ export default async function HomePage({ searchParams, ...rest }: ServerProps) {
   }
 
   const rowsPromise = fetchRows(token.value)
-  const userInfoPromise = getUserInfo(token.value)
+  const settingsPromise = getSettings(token.value)
 
-  const [rows, userInfo] = await Promise.all([rowsPromise, userInfoPromise])
+  const [rows, { settings, profile }] = await Promise.all([
+    rowsPromise,
+    settingsPromise,
+  ])
 
   return (
     <div>
@@ -54,10 +60,11 @@ export default async function HomePage({ searchParams, ...rest }: ServerProps) {
           className="rounded-full shadow-sm"
           width={80}
           height={80}
-          src={userInfo.picture}
+          src={profile.picture}
           alt="perfil"
         />
-        <h2 className="font-bold">Hola {userInfo.name}</h2>
+        <h2 className="font-bold">Hola {profile.name}</h2>
+        <p>{JSON.stringify(settings)}</p>
       </section>
 
       <h2 className="font-bold">Clientes</h2>
@@ -67,7 +74,7 @@ export default async function HomePage({ searchParams, ...rest }: ServerProps) {
             <h3 className="flex-1">{row.nombre}</h3>
             <a
               className="flex items-center gap-1 text-yellow-400"
-              href={buildquery(row, token.value)}
+              href={buildContractQuery(row, token.value)}
             >
               <span>Descargar contrato</span>
               <BsCloudDownload />

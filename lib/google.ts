@@ -2,15 +2,7 @@ import { google } from 'googleapis'
 import stream from 'stream'
 import { Row } from '../app/private/page'
 import { Profile, Tokens } from '../types'
-
-const client_id = process.env.G_CLIENT_ID
-const client_secret = process.env.G_CLIENT_SECRET
-
-export const oauth2Client = new google.auth.OAuth2(
-  client_id,
-  client_secret,
-  `${process.env.NEXT_APP_HOST}/api/redirect`
-)
+import { oauth2Client } from './auth'
 
 export async function getAuthTokens(code: string): Promise<Tokens> {
   const { tokens } = await oauth2Client.getToken(code)
@@ -89,19 +81,6 @@ export async function getDriveFile(
     writer.on('close', () => {
       contentResolve(Buffer.concat(data))
     })
-  })
-}
-
-export async function generateAuthUrl(): Promise<string> {
-  return oauth2Client.generateAuthUrl({
-    access_type: 'offline',
-    scope: [
-      'https://www.googleapis.com/auth/userinfo.email',
-      'https://www.googleapis.com/auth/userinfo.profile',
-      'https://www.googleapis.com/auth/drive.readonly',
-      'https://www.googleapis.com/auth/spreadsheets.readonly',
-    ],
-    prompt: 'consent',
   })
 }
 
