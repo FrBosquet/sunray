@@ -1,13 +1,12 @@
 import { Row } from '../app/private/page'
 import { AppSettings, Profile } from '../types'
 
-export const buildContractQuery = (row: Row, token: string): string => {
+export const buildContractQuery = (row: Row, token: string, fileId: string, fileName: string): string => {
   const params = new URLSearchParams({
-    cliente: row.nombre,
-    nif: row.dni,
-    fecha: row.fecha,
-    importe: row.importe,
+    ...row,
+    fileId,
     token,
+    fileName
   })
 
   return `/api/contract?${params.toString()}`

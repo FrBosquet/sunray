@@ -15,3 +15,8 @@ export type AppSettings = {
   baseFolder: string
   columnRange: string
 }
+
+export type DocxFile = {
+  id: string,
+  name: string
+}

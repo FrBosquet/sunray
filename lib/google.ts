@@ -1,7 +1,7 @@
 import { google } from 'googleapis'
 import stream from 'stream'
 import { Row } from '../app/private/page'
-import { Profile, Tokens } from '../types'
+import { DocxFile, Profile, Tokens } from '../types'
 import { getSettings } from './api'
 import { oauth2Client } from './auth'
 
@@ -52,6 +52,28 @@ export async function fetchRows(token: string): Promise<Row[]> {
   })
 
   return rows
+}
+
+const DOCXMIMETYPE = 'application/vnd.openxmlformats-officedocument.wordprocessingml.document'
+
+export async function getDriveFiles(token: string): Promise<DocxFile[]> {
+  oauth2Client.setCredentials({ access_token: token as string })
+
+  const drive = google.drive({ version: 'v3', auth: oauth2Client })
+  const { settings } = await getSettings(token)
+
+  const fileResponse = await drive.files.list({
+    q: `'${settings.baseFolder}' in parents`,
+  })
+
+  const files = fileResponse.data.files?.filter(({ mimeType }) => {
+    return [DOCXMIMETYPE].includes(mimeType as string)
+  }).map(file => ({
+    name: file.name?.replace(/.docx/, '') as string,
+    id: file.id as string
+  }) as DocxFile) || []
+
+  return files
 }
 
 export async function getDriveFile(

@@ -20,11 +20,11 @@ export default async function handler(
   }
 
   const { query } = req
-  const { token, ...rest } = query
+  const { token, fileId, fileName, ...rest } = query
 
   const content = await getDriveFile(
     token as string,
-    '17NDMTcNr2_YJYt869MajPJUsQsM2Q8yx'
+    fileId as string
   )
 
   const zip = new PizZip(content)
@@ -37,10 +37,11 @@ export default async function handler(
   doc.render(rest)
 
   const buf = doc.getZip().generate({ type: 'nodebuffer' }) as Buffer
-  const clientName = rest.cliente as string
-  const date = new Date(rest.fecha as string)
+  const clientName = (rest.cliente || rest.nombre) as string
+  const date = new Date()
 
   const filename = [
+    fileName,
     clientName.replace(/\s/gi, '_').toLowerCase(),
     date.getDate(),
     date.getMonth(),
