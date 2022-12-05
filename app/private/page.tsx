@@ -12,7 +12,11 @@ export default async function HomePage() {
   try {
 
     const rows = await fetchRows(token)
+
+    console.log('> retrieved rows', rows);
+
     const files = await getDriveFiles(token)
+    console.log('> retrieved files', files)
 
     return (
       <div >
