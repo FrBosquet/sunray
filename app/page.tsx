@@ -15,8 +15,8 @@ export default async function Login() {
   const href = await generateAuthUrl()
 
   return (
-    <section className="container flex justify-center">
-      <article className="w-44 flex flex-col gap-2">
+    <section className="container flex justify-center mx-auto">
+      <article className="w-44 flex flex-col gap-2 h-screen justify-center">
         <h1>Acceder</h1>
         <a
           type="button"
