@@ -2,6 +2,7 @@ import { google } from 'googleapis'
 import stream from 'stream'
 import { Row } from '../app/private/page'
 import { Profile, Tokens } from '../types'
+import { getSettings } from './api'
 import { oauth2Client } from './auth'
 
 export async function getAuthTokens(code: string): Promise<Tokens> {
@@ -26,10 +27,16 @@ export async function fetchRows(token: string): Promise<Row[]> {
 
   oauth2Client.setCredentials({ access_token: token as string })
 
+  const { settings } = await getSettings(token)
+
+  if (!settings) throw new Error('User is not registered in firebase, so its not authorized to use Sunray')
+
+  const { inputSheet, columnRange } = settings
+
   const range = await sheets.spreadsheets.values.get({
     auth: oauth2Client,
-    spreadsheetId: process.env.NEXT_APP_SPREADSHEET_ID,
-    range: 'Clientes!A:E',
+    spreadsheetId: inputSheet,
+    range: columnRange,
   })
 
   const values: Array<string[]> = range.data.values as any

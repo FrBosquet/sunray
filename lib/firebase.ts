@@ -44,7 +44,7 @@ export async function setUserSettings(
   const db = firebaseAdmin.firestore()
 
   const settingsDb = db.collection('settings')
-  const document = await settingsDb.doc(email).update(settings)
+  await settingsDb.doc(email).update(settings)
 
   const updatedSettings = getUserSettings(email)
 

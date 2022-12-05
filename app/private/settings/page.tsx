@@ -12,7 +12,7 @@ export default async function Settings() {
 	return (
 		<div>
 			<h2 className="font-bold text-lg">Configuración</h2>
-			<form action="/api/settings" method="put" className="flex flex-col gap-2">
+			<form action="/api/settings" method="post" className="flex flex-col gap-2">
 				<label htmlFor="baseFolder">Carpeta de google drive:</label>
 				<input className="p-1 rounded-sm" type="text" id="baseFolder" name="baseFolder" defaultValue={settings.baseFolder} />
 				<label htmlFor="inputSheet">Hoja de calculo:</label>

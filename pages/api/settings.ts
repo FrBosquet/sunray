@@ -26,12 +26,12 @@ export default async function handler(
     }
 
     res.status(200).json({ settings, profile })
-  } else if (method === 'PUT') {
-    const { body } = req
+  } else if (method === 'POST') {
+    const body = req.body
 
-    const settings = await setUserSettings(profile.email, body as AppSettings)
+    await setUserSettings(profile.email, { ...body } as AppSettings)
 
-    res.status(200).json({ settings, profile })
+    res.redirect('/private/settings')
   } else {
     res.status(500).send(`Method ${method} not supported`)
   }
