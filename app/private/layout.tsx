@@ -1,10 +1,11 @@
 import { cookies } from 'next/headers'
 import Image from 'next/image'
 import Link from 'next/link'
-import { BsNewspaper, BsSunFill } from 'react-icons/bs'
-import { BiCog } from 'react-icons/bi'
-import { getSettings } from '../../lib/api'
 import { redirect } from 'next/navigation'
+import { BiCog } from 'react-icons/bi'
+import { BsNewspaper, BsSunFill } from 'react-icons/bs'
+import { getSettings } from '../../lib/api'
+
 
 export default async function RootLayout({
   children,
@@ -22,12 +23,12 @@ export default async function RootLayout({
 
   return (
     <div>
-      <header className="p-4 bg-gradient-to-t from-yellow-900 to-yellow-800 flex items-center gap-2">
+      <header className="p-4 bg-gradient-to-t from-slate-900 to-slate-800 flex items-center gap-2 border-b border-white/25">
         <BsSunFill className="text-yellow-600" />
-        <h1 className="text-yellow-600 text-3xl font-extrabold uppercase tracking-wide">
+        <h1 className="text-transparent bg-clip-text bg-gradient-to-r from-yellow-600 to-yellow-100 text-3xl font-extrabold uppercase tracking-widest">
           Sunray
         </h1>
-        <p className='flex-1'>Software de gestión para ahorasolar</p>
+        <p className='flex-1'>Software de gestión para <strong>AhoraSolar</strong></p>
         <Link href="/private">
           <BsNewspaper />
         </Link>
