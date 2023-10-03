@@ -1,5 +1,6 @@
 import { google } from 'googleapis'
 import { AiFillGoogleCircle } from 'react-icons/ai'
+import { BsSunFill } from 'react-icons/bs'
 import { generateAuthUrl } from '../lib/auth'
 
 const client_id = process.env.G_CLIENT_ID
@@ -16,12 +17,16 @@ export default async function Login() {
 
   return (
     <section className="container flex justify-center mx-auto">
-      <article className="w-44 flex flex-col gap-2 h-screen justify-center">
+      <article className="flex flex-col gap-2 h-screen justify-center items-center">
+        <BsSunFill className="text-yellow-100 text-9xl" />
+        <h1 className="text-transparent bg-clip-text bg-gradient-to-t from-yellow-600 to-yellow-100 text-9xl font-extrabold uppercase tracking-widest">
+          Sunray
+        </h1>
         <h1>Acceder</h1>
         <a
           type="button"
           href={href}
-          className="w-full p-2 flex justify-center items-center gap-1 bg-blue-500 rounded-md hover:bg-blue-300 transition-all"
+          className="w-full p-2 flex justify-center items-center gap-1 bg-blue-500 rounded-md hover:bg-blue-300 hover:text-slate-900 transition-all font-semibold"
         >
           <AiFillGoogleCircle />
           con Google

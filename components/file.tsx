@@ -10,8 +10,6 @@ type Props = {
 }
 
 export const ContractDL = ({ row, token, file, clientName }: Props) => {
-  console.log('contract dl', file);
-
   const date = new Date()
 
   const filename = [
@@ -26,7 +24,7 @@ export const ContractDL = ({ row, token, file, clientName }: Props) => {
     key={file.id}
     data-type="download"
     data-filename={filename}
-    className="flex items-center gap-1 text-yellow-400 ml-1 hover:text-red-400"
+    className="flex items-center gap-1 text-yellow-400 ml-1 hover:text-yellow-600 transition"
     href={buildContractQuery(row, token, file.id, file.name)}
   >
     <span>{file.name}</span>

@@ -1,11 +1,10 @@
 import { cookies } from 'next/headers'
 import Image from 'next/image'
-import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import { BiCog } from 'react-icons/bi'
 import { BsNewspaper, BsSunFill } from 'react-icons/bs'
+import { NavLink } from '../../components/navlink'
 import { getSettings } from '../../lib/api'
-
 
 export default async function RootLayout({
   children,
@@ -29,12 +28,12 @@ export default async function RootLayout({
           Sunray
         </h1>
         <p className='flex-1'>Software de gestión para <strong>AhoraSolar</strong></p>
-        <Link href="/private">
+        <NavLink href="/private">
           <BsNewspaper />
-        </Link>
-        <Link href="/private/settings">
+        </NavLink>
+        <NavLink href="/private/settings">
           <BiCog />
-        </Link>
+        </NavLink>
         <section className="flex justify-center flex-col items-center">
           <Image
             className="rounded-full shadow-sm"

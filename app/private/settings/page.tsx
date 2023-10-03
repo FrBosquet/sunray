@@ -1,5 +1,3 @@
-
-
 import { cookies } from "next/headers"
 import { getSettings } from "../../../lib/api"
 
@@ -20,7 +18,7 @@ export default async function Settings() {
 				<label htmlFor="columnRange">Intervalo:</label>
 				<input className="p-1 rounded-sm" type="text" id="columnRange" name="columnRange" defaultValue={settings.columnRange} />
 				<button type="submit"
-					className="mt-4 w-full p-2 flex justify-center items-center gap-1 bg-blue-500 rounded-md hover:bg-blue-300 transition-all"
+					className="mt-4 w-full p-2 flex justify-center items-center gap-1 bg-blue-500 rounded-md hover:bg-blue-300 hover:text-slate-900 transition-all"
 				>Actualizar</button>
 			</form>
 		</div>

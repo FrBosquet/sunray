@@ -11,14 +11,12 @@ const downloadFile = async (url: string, filename: string) => {
 
 export const DownloadAll = () => {
   const handleClick = () => {
-    console.log('download all')
     document.querySelectorAll('a[data-type=download]').forEach((a) => {
-      console.log(a.getAttribute('href'))
       const href = a.getAttribute('href') as string
       const filename = a.getAttribute('data-filename') as string
       downloadFile(href, filename as string)
     })
   }
 
-  return <button className="text-yellow-400" onClick={handleClick}>Descargar todos</button>
+  return <button className="text-yellow-400 hover:text-yellow-600 transition" onClick={handleClick}>Descargar todos</button>
 }
