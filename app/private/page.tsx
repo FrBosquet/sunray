@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
-import { BsCloudDownload } from 'react-icons/bs'
-import { buildContractQuery } from '../../lib/api'
+import { DownloadAll } from '../../components/download-all'
+import { ContractDL } from '../../components/file'
 import { fetchRows, getDriveFiles } from '../../lib/google'
 
 export type Row = Record<string, string>
@@ -12,29 +12,21 @@ export default async function HomePage() {
   try {
 
     const rows = await fetchRows(token)
-
-    console.log('> retrieved rows', rows);
-
     const files = await getDriveFiles(token)
-    console.log('> retrieved files', files)
 
     return (
       <div >
-        <h2 className="font-bold">Clientes</h2>
-        <ul>
+        <section className='flex border-b border-white p-1'>
+          <h2 className="font-bold flex-1">Clientes</h2>
+          <DownloadAll />
+        </section>
+        <ul className='pt-4'>
           {rows.map((row) => (
             <li className="flex hover:bg-gray-800 p-1" key={row.id}>
               <h3 className="flex-1">{row.nombre}</h3>
               {
                 files.map(file => {
-                  return <a
-                    key={file.id}
-                    className="flex items-center gap-1 text-yellow-400 ml-1 hover:text-red-400"
-                    href={buildContractQuery(row, token, file.id, file.name)}
-                  >
-                    <span>{file.name}</span>
-                    <BsCloudDownload />
-                  </a>
+                  return <ContractDL clientName={row.nombre} key={file.id} row={row} token={token} file={file} />
                 })
               }
             </li>
